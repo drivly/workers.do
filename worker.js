@@ -29,7 +29,7 @@ export default {
           },
           body: `------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"metadata\"; filename=\"blob\"\r\nContent-Type: application/octet-stream\r\n\r\n{\"main_module\":\"worker.js\"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"worker.js\"; filename=\"worker.js\"\r\nContent-Type: application/javascript+module\r\n\r\n${module ?? "export default {\n  fetch: () => new Response('Hello World')\n}"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey--\r\n`,
           method: "POST",
-       }).then(res => json()).catch(err => err.message)
+       }).then(res => json()).catch(({name, message, stack}) => ({ error: {name, message, stack}}))
 
       
       return new Response(JSON.stringify({ api, results, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
