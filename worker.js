@@ -32,7 +32,7 @@ export default {
        }).then(res => json()).catch(err => err.message)
 
       
-      return new Response(JSON.stringify({ api, status, headers, results, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+      return new Response(JSON.stringify({ api, headers, results, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
     
     let res = undefined
