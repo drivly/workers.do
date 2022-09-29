@@ -16,31 +16,38 @@ export const api = {
 
 export default {
   fetch: async (req, env) => {
-    const { user, subdomain, body, pathname } = await env.CTX.fetch(req).then(res => res.json())
+    const { user, requestId, subdomain, body, pathname } = await env.CTX.fetch(req).then(res => res.json())
     
-    // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{scriptName}"
+    // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
       const module = body ?? await fetch('https:/' + pathname).then(res => res.text()).catch() 
       
-      
-        const id = fetch("https://cloudflareworkers.com/script", {
-          "headers": {
-            "accept": "*/*",
-            "accept-language": "en-US,en;q=0.9",
-            "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey",
-          },
-          "referrer": "https://cloudflareworkers.com/",
-          "referrerPolicy": "strict-origin-when-cross-origin",
-          "body": "------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"metadata\"; filename=\"blob\"\r\nContent-Type: application/octet-stream\r\n\r\n{\"main_module\":\"worker.js\"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"worker.js\"; filename=\"worker.js\"\r\nContent-Type: application/javascript+module\r\n\r\nexport default {\n  fetch: () => new Response('Hello World')\n}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey--\r\n",
-          "method": "POST",
-          "mode": "cors",
-          "credentials": "include"
-        }).then(res => json()).catch(err => err.message)
+      const results = await fetch(`https://api.cloudflare.com/client/v4/accounts/b6641681fe423910342b9ffa1364c76d/workers/dispatch/namespaces/example-namespace/scripts/${requestId}`, {
+        {
+          headers: {
+            'authorization': 'Bearer ' + env.CF_API_TOKEN,
+            'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey',
+          }
+       }).then(res => json()).catch(err => err.message)
+                                  
+//         const id = fetch("https://cloudflareworkers.com/script", {
+//           "headers": {
+//             "accept": "*/*",
+//             "accept-language": "en-US,en;q=0.9",
+//             "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey",
+//           },
+//           "referrer": "https://cloudflareworkers.com/",
+//           "referrerPolicy": "strict-origin-when-cross-origin",
+//           "body": "------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"metadata\"; filename=\"blob\"\r\nContent-Type: application/octet-stream\r\n\r\n{\"main_module\":\"worker.js\"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"worker.js\"; filename=\"worker.js\"\r\nContent-Type: application/javascript+module\r\n\r\nexport default {\n  fetch: () => new Response('Hello World')\n}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey--\r\n",
+//           "method": "POST",
+//           "mode": "cors",
+//           "credentials": "include"
+//         }).then(res => json()).catch(err => err.message)
       
       
 //       const res => await fetch(
       
-      return new Response(JSON.stringify({ api, status, headers, data, id, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+      return new Response(JSON.stringify({ api, status, headers, data, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
     
     let res = undefined
