@@ -6,3 +6,7 @@ compatibility_date = "2022-08-25"
 services = [
   { binding = "CTX", service = "ctx-do", environment = "production" }
 ]
+
+[[dispatch_namespaces]]
+binding = "dispatcher"
+namespace = "example-namespace"
