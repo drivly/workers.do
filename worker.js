@@ -16,9 +16,23 @@ export const api = {
 
 export default {
   fetch: async (req, env) => {
-    const { user, origin, requestId, method, body, time, pathname, pathSegments, pathOptions, url, query } = await env.CTX.fetch(req).then(res => res.json())
-    if (pathname == '/subscribe' && !user.profile) return Response.redirect(origin + '/login')
-
-    return new Response(JSON.stringify({ api, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+    const { user, subdomain } = await env.CTX.fetch(req).then(res => res.json())
+    
+    let res = undefined
+    try {
+      res = await env.dispatcher.get(subdomain).fetch(request)
+    } catch (e) {
+      if (e.message == 'Error: Worker not found.') {
+          return new Response('', {status: 404})
+      }
+      return new Response(e.message, {status: 500})
+    }
+    
+    const { status } = req
+    const headers = Object.fromEntries(res.headers)
+    let body = await res.text()
+    let data = await JSON.parse(body).catch() ?? body
+ 
+    return new Response(JSON.stringify({ api, status, headers, data, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
   },
 }
