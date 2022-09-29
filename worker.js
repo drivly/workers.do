@@ -18,7 +18,7 @@ export default {
   fetch: async (req, env) => {
     const { user, subdomain, body, pathname } = await env.CTX.fetch(req).then(res => res.json())
     
-    // "https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/workers/dispatch/namespaces/<NAMESPACE_NAME>/scripts/<SCRIPT_NAME>"
+    // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{scriptName}"
     if (!subdomain) {
       const module = body ?? await fetch('https:/' + pathname).then(res => res.text()).catch() 
       
@@ -55,8 +55,8 @@ export default {
     
     const { status } = req
     const headers = Object.fromEntries(res.headers)
-    let body = await res.text()
-    let data = await JSON.parse(body).catch() ?? body
+    let text = await res.text()
+    let data = await JSON.parse(body).catch() ?? text
  
     return new Response(JSON.stringify({ api, status, headers, data, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
   },
