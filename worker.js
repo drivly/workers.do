@@ -28,8 +28,8 @@ export default {
       cloudflareApiToken,
     } = body
     
-    const repoName = context.repository.name
-    const ownerName = context.owner.name
+    const repoName = context?.repository?.name
+    const ownerName = context?.owner?.name
     
     console.log({name, repoName, ownerName, worker})
     
