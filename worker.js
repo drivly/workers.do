@@ -16,7 +16,14 @@ export const api = {
 
 export default {
   fetch: async (req, env) => {
-    const { user, subdomain } = await env.CTX.fetch(req).then(res => res.json())
+    const { user, subdomain, body, pathname } = await env.CTX.fetch(req).then(res => res.json())
+    
+    // "https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/workers/dispatch/namespaces/<NAMESPACE_NAME>/scripts/<SCRIPT_NAME>"
+    if (!subdomain) {
+      const module = body ?? await fetch('https:/' + pathname).then(res => res.text())
+//       const res => await fetch(
+      return new Response(JSON.stringify({ api, status, headers, data, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+    }
     
     let res = undefined
     try {
