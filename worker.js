@@ -20,14 +20,14 @@ export default {
     
     // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
-      const module = body ?? await fetch('https:/' + pathname).then(res => res.text()).catch() 
+      const module = body?.worker ?? await fetch('https:/' + pathname).then(res => res.text()).catch() 
       
       const results = await fetch(`https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${requestId}`, {
           headers: {
             'authorization': 'Bearer ' + env.CF_API_TOKEN,
             'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey',
           },
-          body: `------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"metadata\"; filename=\"blob\"\r\nContent-Type: application/octet-stream\r\n\r\n{\"main_module\":\"worker.js\"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"worker.js\"; filename=\"worker.js\"\r\nContent-Type: application/javascript+module\r\n\r\n${module ?? "export default {\n  fetch: () => new Response('Hello World')\n}"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey--\r\n",
+          body: `------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"metadata\"; filename=\"blob\"\r\nContent-Type: application/octet-stream\r\n\r\n{\"main_module\":\"worker.js\"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"worker.js\"; filename=\"worker.js\"\r\nContent-Type: application/javascript+module\r\n\r\n${module ?? "export default {\n  fetch: () => new Response('Hello World')\n}"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey--\r\n`,
           method: "POST",
        }).then(res => json()).catch(err => err.message)
 
