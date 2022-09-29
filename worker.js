@@ -21,7 +21,7 @@ export default {
 //     console.log(body)
 //     console.log(user)
     
-    console.log(body?.worker)
+    console.log(Object.keys(body))
     
     // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
