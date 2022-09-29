@@ -20,8 +20,15 @@ export default {
     
 //     console.log(body)
 //     console.log(user)
+    const { 
+      name,
+      context,
+      worker,
+      cloudflareAccountId,
+      cloudflareApiToken,
+    } = body
     
-    console.log(Object.keys(body))
+    console.log({worker})
     
     // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
