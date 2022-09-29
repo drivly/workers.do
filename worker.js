@@ -46,6 +46,7 @@ export default {
           method: "POST",
        }).then(res => json()).catch(({name, message, stack}) => ({ error: {name, message, stack}}))
 
+      console.log({results})
       
       return new Response(JSON.stringify({ api, results, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
