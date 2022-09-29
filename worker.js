@@ -45,6 +45,39 @@ export default {
 //           body: `------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"metadata\"; filename=\"blob\"\r\nContent-Type: application/octet-stream\r\n\r\n{\"main_module\":\"worker.js\"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"worker.js\"; filename=\"worker.js\"\r\nContent-Type: application/javascript+module\r\n\r\n${"export default {\n  fetch: () => new Response('Hello World')\n}"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey--\r\n`,
 //           method: "POST",
 //        }).then(res => json()).catch(({name, message, stack}) => ({ error: {name, message, stack}}))
+      
+//       export async function PutScriptInDispatchNamespace(env: Env, scriptName: string, scriptContent: string): Promise<Response> {
+//       const scriptFileName = `${scriptName}.mjs`;
+//       const metadata = {
+//         'main_module': scriptFileName,
+//         // services: [  // Might not work yet...
+//         //   {
+//         //     binding: "",
+//         //     service: "",
+//         //     environment: ""
+//         //   }
+//         // ],
+//         // bindings: [
+//         //   {
+//         //     "type": "",
+//         //     "param": "",
+//         //     "name": ""
+//         //   }
+//         // ],
+//       };
+//       const formData = new FormData();
+//       formData.append('script', new File([scriptContent], scriptFileName, { type: 'application/javascript+module'}));
+//       const helloModuleContent = 'const hello = "Hello World!"; export { hello };';
+//       formData.append('hello_module', new File([helloModuleContent], 'hello_module.mjs', { type: 'application/javascript+module'}));
+//       formData.append('metadata', new File([JSON.stringify(metadata)], 'metadata.json', { type: 'application/json'}));
+//       return await fetch(`${ScriptsURI(env)}/${scriptName}`, {
+//         method: 'PUT',
+//         body: formData,
+//         headers: {
+//           ...MakeHeaders(env)
+//         },
+//       });
+//     }
 
       console.log({results})
       
