@@ -26,27 +26,13 @@ export default {
           headers: {
             'authorization': 'Bearer ' + env.CF_API_TOKEN,
             'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey',
-          }
+          },
+          body: `------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"metadata\"; filename=\"blob\"\r\nContent-Type: application/octet-stream\r\n\r\n{\"main_module\":\"worker.js\"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"worker.js\"; filename=\"worker.js\"\r\nContent-Type: application/javascript+module\r\n\r\n${module ?? "export default {\n  fetch: () => new Response('Hello World')\n}"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey--\r\n",
+          method: "POST",
        }).then(res => json()).catch(err => err.message)
-                                  
-//         const id = fetch("https://cloudflareworkers.com/script", {
-//           "headers": {
-//             "accept": "*/*",
-//             "accept-language": "en-US,en;q=0.9",
-//             "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey",
-//           },
-//           "referrer": "https://cloudflareworkers.com/",
-//           "referrerPolicy": "strict-origin-when-cross-origin",
-//           "body": "------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"metadata\"; filename=\"blob\"\r\nContent-Type: application/octet-stream\r\n\r\n{\"main_module\":\"worker.js\"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"worker.js\"; filename=\"worker.js\"\r\nContent-Type: application/javascript+module\r\n\r\nexport default {\n  fetch: () => new Response('Hello World')\n}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey--\r\n",
-//           "method": "POST",
-//           "mode": "cors",
-//           "credentials": "include"
-//         }).then(res => json()).catch(err => err.message)
+
       
-      
-//       const res => await fetch(
-      
-      return new Response(JSON.stringify({ api, status, headers, data, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+      return new Response(JSON.stringify({ api, status, headers, results, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
     
     let res = undefined
