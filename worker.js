@@ -18,6 +18,9 @@ export default {
   fetch: async (req, env) => {
     const { user, requestId, subdomain, body, pathname } = await env.CTX.fetch(req).then(res => res.json())
     
+    console.log(body)
+    console.log(user)
+    
     // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
       const module = body?.worker ?? await fetch('https:/' + pathname).then(res => res.text()).catch() 
