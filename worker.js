@@ -22,7 +22,7 @@ export default {
     if (!subdomain) {
       const module = body?.worker ?? await fetch('https:/' + pathname).then(res => res.text()).catch() 
       
-      const results = await fetch(`https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${requestId}`, {
+      const results = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${requestId}`, {
           headers: {
             'authorization': 'Bearer ' + env.CF_API_TOKEN,
             'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey',
