@@ -119,7 +119,7 @@ export default {
       }
     } catch (e) {
       if (e.message == 'Error: Worker not found.') {
-          return new Response('', {status: 404})
+          return new Response(JSON.stringify({ message: 'Error: Worker not found. If you just deployed, try again in a few seconds', url: req.url }, null, 2), {status: 404})
       }
       return new Response(e.message, {status: 500})
     }
