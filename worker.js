@@ -76,7 +76,7 @@ export default {
     
     let res = undefined
     try {
-      res = await env.dispatcher.get(subdomain).fetch(request)
+      res = await env.dispatcher.get(subdomain).fetch(req)
     } catch (e) {
       if (e.message == 'Error: Worker not found.') {
           return new Response('', {status: 404})
