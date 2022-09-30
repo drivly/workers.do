@@ -112,7 +112,7 @@ export default {
       try {
         request.cf.user = user
         request.cf.ctx = ctx
-        request.headers.append('ctx-do', JSON.stringify(user))
+        // request.headers.append('ctx-do', JSON.stringify(user))
         res = await env.dispatcher.get(subdomain).fetch(request)
         return res
       } catch ({name, message, stack }) {
