@@ -26,6 +26,7 @@ export default {
       name,
       context,
       worker,
+      domain,
       cloudflareAccountId,
       cloudflareApiToken,
     } = body
@@ -45,7 +46,7 @@ export default {
       const scriptFileName = 'worker.js';
       const metadata = {
         'main_module': scriptFileName,
-        'tags': [name, repoName, ownerName],
+        'tags': [name, repoName, ownerName, domain, commitSha],
         // services: [  // Might not work yet...
         //   {
         //     binding: "",
