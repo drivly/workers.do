@@ -45,9 +45,9 @@ export default {
     if (!subdomain) {
 
       const scriptContent = worker //?? rootPath ? "export default {\n  fetch: () => new Response('Hello World')\n}" : await fetch('https:/' + pathname).then(res => res.text()).catch() 
-      const scriptFileName = 'worker.js';
+      // const scriptFileName = 'worker.js';
       const metadata = {
-        'main_module': scriptFileName,
+        'main_module': 'index.js',
         'tags': [name, repoName, ownerName, domain, commitSha],
         // services: [  // Might not work yet...
         //   {
@@ -75,11 +75,25 @@ export default {
         
       console.log({deployToUserAccount, cloudflareDeployURL})
 
+      // Create a wrapper for the worker module to inject the ctx object
+      const workerWrapper = `
+import worker from 'worker'
+
+export default {
+  fetch: (req, env, ctx) => {
+    const headers = Object.fromEntries(req.headers)
+    const request = new Request(req)
+    request.ctx = JSON.parse(headers['ctx-do'])
+    request.headers.delete('cookie')
+    return fetch(request, env, ctx)
+  }
+}
+`
+
 
       const formData = new FormData()
-      formData.append('script', new File([scriptContent], scriptFileName, { type: 'application/javascript+module'}))
-      // const helloModuleContent = 'const hello = "Hello World!"; export { hello };';
-      // formData.append('hello_module', new File([helloModuleContent], 'hello_module.mjs', { type: 'application/javascript+module'}));
+      formData.append('script', new File([scriptContent], 'worker.js', { type: 'application/javascript+module'}))
+      formData.append('index', new File([workerWrapper], 'index.js', { type: 'application/javascript+module'}));
       formData.append('metadata', new File([JSON.stringify(metadata)], 'metadata.json', { type: 'application/json'}))
       const results = await fetch(cloudflareDeployURL, {
         method: 'PUT',
