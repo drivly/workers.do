@@ -57,22 +57,26 @@ export default {
         // ],
       }
 
+      const workerId = crypto.randomUUID() //requestId
+
       const formData = new FormData()
       formData.append('script', new File([scriptContent], scriptFileName, { type: 'application/javascript+module'}))
       // const helloModuleContent = 'const hello = "Hello World!"; export { hello };';
       // formData.append('hello_module', new File([helloModuleContent], 'hello_module.mjs', { type: 'application/javascript+module'}));
       formData.append('metadata', new File([JSON.stringify(metadata)], 'metadata.json', { type: 'application/json'}))
-      const results = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${requestId}`, {
+      const results = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${workerId}`, {
         method: 'PUT',
         body: formData,
         headers: {
           'authorization': 'Bearer ' + env.CF_API_TOKEN,
         },
-      }).then(res => res.json()).catch(({name, message, stack}) => ({ error: {name, message, stack}}))
+      }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
 
       console.log(JSON.stringify({results}))
+
+      const url = `https://${workerId}.workers.do`
     
-      return new Response(JSON.stringify({ api, results, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+      return new Response(JSON.stringify({ api, url, results, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
     
     let res = undefined
