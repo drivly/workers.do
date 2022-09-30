@@ -16,7 +16,9 @@ export const api = {
 
 export default {
   fetch: async (req, env) => {
-    const { user, requestId, subdomain, body, rootPath, pathname } = await env.CTX.fetch(req).then(res => res.json())
+    const request = req.clone()
+    const ctx = await env.CTX.fetch(req).then(res => res.json())
+    const { user, requestId, subdomain, body, rootPath, pathname } = ctx
     
 //     console.log(body)
 //     console.log(user)
@@ -108,7 +110,9 @@ export default {
     let res = undefined
     try {
       try {
-        res = await env.dispatcher.get(subdomain).fetch(req)
+        request.cf.user = user
+        request.cf.ctx = ctx
+        res = await env.dispatcher.get(subdomain).fetch(request)
         return res
       } catch ({name, message, stack }) {
         return new Response(JSON.stringify({ status: 500, error: { name, message, stack }}))
