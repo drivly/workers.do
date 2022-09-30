@@ -86,7 +86,8 @@ export default {
           headers: {
             Accept: 'application/vnd.github+json',
             Authorization: 'Bearer ' + env.GITHUB_TOKEN,
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/x-www-form-urlencoded",
+            "User-Agent": "https://workers.do"
           },
           method: 'POST'
         }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
