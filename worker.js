@@ -39,7 +39,7 @@ export default {
     // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
 
-      const scriptContent = worker ?? rootPath ? "export default {\n  fetch: () => new Response('Hello World')\n}" : await fetch('https:/' + pathname).then(res => res.text()).catch() 
+      const scriptContent = worker //?? rootPath ? "export default {\n  fetch: () => new Response('Hello World')\n}" : await fetch('https:/' + pathname).then(res => res.text()).catch() 
       const scriptFileName = 'worker.js';
       const metadata = {
         'main_module': scriptFileName,
@@ -74,6 +74,8 @@ export default {
           'authorization': 'Bearer ' + env.CF_API_TOKEN,
         },
       }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
+
+      console.log(Object.entries(formData))
 
       console.log(JSON.stringify({results}))
 
