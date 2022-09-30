@@ -47,7 +47,7 @@ export default {
       const scriptContent = worker //?? rootPath ? "export default {\n  fetch: () => new Response('Hello World')\n}" : await fetch('https:/' + pathname).then(res => res.text()).catch() 
       // const scriptFileName = 'worker.js';
       const metadata = {
-        'main_module': 'index.js',
+        'main_module': 'index.mjs',
         'tags': [name, repoName, ownerName, domain, commitSha],
         // services: [  // Might not work yet...
         //   {
@@ -93,8 +93,8 @@ export default {
 
 
       const formData = new FormData()
-      formData.append('worker', new File([scriptContent], 'worker.js', { type: 'application/javascript+module'}))
-      formData.append('index', new File([workerWrapper], 'index.js', { type: 'application/javascript+module'}));
+      formData.append('worker', new File([scriptContent], 'worker.mjs', { type: 'application/javascript+module'}))
+      formData.append('index', new File([workerWrapper], 'index.mjs', { type: 'application/javascript+module'}));
       formData.append('metadata', new File([JSON.stringify(metadata)], 'metadata.json', { type: 'application/json'}))
       const results = await fetch(cloudflareDeployURL, {
         method: 'PUT',
