@@ -30,8 +30,8 @@ export default {
     
     console.log(context)
 
-    const repoName = context?.repository?.name
-    const ownerName = context?.owner?.name
+    const repoName = context?.payload?.repository?.name
+    const ownerName = context?.payload?.repository?.owner?.name
     const commitSha = context?.sha
     
     // console.log({name, repoName, ownerName, worker})
