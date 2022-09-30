@@ -47,7 +47,7 @@ export default {
       const scriptContent = worker //?? rootPath ? "export default {\n  fetch: () => new Response('Hello World')\n}" : await fetch('https:/' + pathname).then(res => res.text()).catch() 
       // const scriptFileName = 'worker.js';
       const metadata = {
-        'main_module': 'index.mjs',
+        'main_module': 'worker.mjs', // 'index.mjs', // Figure out why the index module can't import the worker
         'tags': [name, repoName, ownerName, domain, commitSha],
         // services: [  // Might not work yet...
         //   {
