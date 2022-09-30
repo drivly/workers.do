@@ -37,16 +37,18 @@ export default {
     if (!subdomain) {
       const scriptContent = worker ?? await fetch('https:/' + pathname).then(res => res.text()).catch() 
       
-
-      //await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${requestId}`, {
-//           headers: {
-//             'authorization': 'Bearer ' + env.CF_API_TOKEN,
-//             'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey',
-//           },
-//           body: `------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"metadata\"; filename=\"blob\"\r\nContent-Type: application/octet-stream\r\n\r\n{\"main_module\":\"worker.js\"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"worker.js\"; filename=\"worker.js\"\r\nContent-Type: application/javascript+module\r\n\r\n${"export default {\n  fetch: () => new Response('Hello World')\n}"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey--\r\n`,
-//           method: "POST",
-//        }).then(res => json()).catch(({name, message, stack}) => ({ error: {name, message, stack}}))
-      
+      // console.log(env.CF_ACCOUNT_ID)
+      const apiEndpoint = `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${requestId}`
+      console.log(apiEndpoint)
+      const initial = await fetch(apiEndpoint, {
+          headers: {
+            'authorization': 'Bearer ' + env.CF_API_TOKEN,
+            'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey',
+          },
+          body: `------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"metadata\"; filename=\"blob\"\r\nContent-Type: application/octet-stream\r\n\r\n{\"main_module\":\"worker.js\"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey\r\nContent-Disposition: form-data; name=\"worker.js\"; filename=\"worker.js\"\r\nContent-Type: application/javascript+module\r\n\r\n${"export default {\n  fetch: () => new Response('Hello World')\n}"}\r\n------WebKitFormBoundaryuAT7UVLyzllBl3ey--\r\n`,
+          method: "POST",
+       }).then(res => res.json()).catch(({name, message, stack}) => ({ error: {name, message, stack}}))
+      console.log(JSON.stringify(initial))
 //       export async function PutScriptInDispatchNamespace(env: Env, scriptName: string, scriptContent: string): Promise<Response> {
 
       const scriptFileName = 'worker.js';
@@ -80,10 +82,10 @@ export default {
           'authorization': 'Bearer ' + env.CF_API_TOKEN,
           // 'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey',
         },
-      }).then(res => json()).catch(({name, message, stack}) => ({ error: {name, message, stack}}))
+      }).then(res => res.json()).catch(({name, message, stack}) => ({ error: {name, message, stack}}))
 //     }
 
-      console.log({results})
+      console.log(JSON.stringify({results}))
       
       return new Response(JSON.stringify({ api, results, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
