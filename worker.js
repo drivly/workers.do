@@ -81,7 +81,9 @@ export default {
 
         url = `https://${workerId}.workers.do`
 
-        const comment = await fetch(`https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`, {
+        const commentURL = `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
+        console.log(commentURL)
+        const comment = await fetch(commentURL, {
           body: JSON.stringify({ body: 'Deployed successfully to ' + url }),
           headers: {
             Accept: 'application/vnd.github+json',
