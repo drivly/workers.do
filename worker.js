@@ -67,7 +67,7 @@ export default {
 
       const workerId = commitSha.slice(0,7) //+ '-' + ownerName //requestId
 
-      const deployToUserAccount = (name && cloudflareAccountId != '' && cloudflareApiToken != '') ? true : false
+      const deployToUserAccount = (name.length > 1 && cloudflareAccountId.length > 10 && cloudflareApiToken.length > 10) ? true : false
 
       const cloudflareDeployURL = deployToUserAccount ? 
         `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${workerId}` :
