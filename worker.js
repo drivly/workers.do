@@ -49,7 +49,7 @@ export default {
       
 //       export async function PutScriptInDispatchNamespace(env: Env, scriptName: string, scriptContent: string): Promise<Response> {
 
-      const scriptFileName = worker.js;
+      const scriptFileName = 'worker.js';
       const metadata = {
         'main_module': scriptFileName,
         // services: [  // Might not work yet...
