@@ -40,6 +40,7 @@ export default {
       const scriptFileName = 'worker.js';
       const metadata = {
         'main_module': scriptFileName,
+        'tags': [name, repoName, ownerName],
         // services: [  // Might not work yet...
         //   {
         //     binding: "",
