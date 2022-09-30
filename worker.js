@@ -32,7 +32,7 @@ export default {
     const ownerName = context?.owner?.name
     const commitSha = context?.sha
     
-    console.log({name, repoName, ownerName, worker})
+    // console.log({name, repoName, ownerName, worker})
     
     // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
@@ -90,7 +90,7 @@ export default {
             "User-Agent": "https://workers.do"
           },
           method: 'POST'
-        }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
+        }).then(res => res.text()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
         console.log(comment)
       } else {
         codeLines = scriptContent.split('\n')
