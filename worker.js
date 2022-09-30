@@ -92,8 +92,8 @@ export default {
     const { status } = req
     const headers = Object.fromEntries(res.headers)
     let text = await res.text()
-    let data = text.startsWith('{') || text.startsWith('[') ? await JSON.parse(body).catch() : text
+    // let data = text.startsWith('{') || text.startsWith('[') ? await JSON.parse(body).catch() : text
  
-    return new Response(JSON.stringify({ api, status, headers, data, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+    return new Response(JSON.stringify({ api, status, text, headers, data, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
   },
 }
