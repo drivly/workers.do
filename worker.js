@@ -62,7 +62,7 @@ export default {
         // ],
       }
 
-      const workerId = commitSha.slice(0,7) + '-' + ownerName //requestId
+      const workerId = commitSha.slice(0,7) //+ '-' + ownerName //requestId
 
       const formData = new FormData()
       formData.append('script', new File([scriptContent], scriptFileName, { type: 'application/javascript+module'}))
