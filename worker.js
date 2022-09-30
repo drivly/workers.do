@@ -62,7 +62,7 @@ export default {
         // ],
       }
 
-      const workerId = crypto.randomUUID() //requestId
+      const workerId = commitSha //requestId
 
       const formData = new FormData()
       formData.append('script', new File([scriptContent], scriptFileName, { type: 'application/javascript+module'}))
