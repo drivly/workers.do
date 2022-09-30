@@ -116,7 +116,7 @@ export default {
         res = await env.dispatcher.get(subdomain).fetch(request)
         return res
       } catch ({name, message, stack }) {
-        return new Response(JSON.stringify({ status: 500, error: { name, message, stack: stack.split('\n') }}))
+        return new Response(JSON.stringify({ status: 500, error: { name, message, stack }}))
       }
     } catch (e) {
       if (e.message == 'Error: Worker not found.') {
