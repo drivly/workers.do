@@ -35,9 +35,10 @@ export default {
     
     // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
-      const module = worker ?? await fetch('https:/' + pathname).then(res => res.text()).catch() 
+      const scriptContent = worker ?? await fetch('https:/' + pathname).then(res => res.text()).catch() 
       
-      const results = '' //await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${requestId}`, {
+
+      //await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${requestId}`, {
 //           headers: {
 //             'authorization': 'Bearer ' + env.CF_API_TOKEN,
 //             'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey',
@@ -47,36 +48,39 @@ export default {
 //        }).then(res => json()).catch(({name, message, stack}) => ({ error: {name, message, stack}}))
       
 //       export async function PutScriptInDispatchNamespace(env: Env, scriptName: string, scriptContent: string): Promise<Response> {
-//       const scriptFileName = `${scriptName}.mjs`;
-//       const metadata = {
-//         'main_module': scriptFileName,
-//         // services: [  // Might not work yet...
-//         //   {
-//         //     binding: "",
-//         //     service: "",
-//         //     environment: ""
-//         //   }
-//         // ],
-//         // bindings: [
-//         //   {
-//         //     "type": "",
-//         //     "param": "",
-//         //     "name": ""
-//         //   }
-//         // ],
-//       };
-//       const formData = new FormData();
-//       formData.append('script', new File([scriptContent], scriptFileName, { type: 'application/javascript+module'}));
-//       const helloModuleContent = 'const hello = "Hello World!"; export { hello };';
-//       formData.append('hello_module', new File([helloModuleContent], 'hello_module.mjs', { type: 'application/javascript+module'}));
-//       formData.append('metadata', new File([JSON.stringify(metadata)], 'metadata.json', { type: 'application/json'}));
-//       return await fetch(`${ScriptsURI(env)}/${scriptName}`, {
-//         method: 'PUT',
-//         body: formData,
-//         headers: {
-//           ...MakeHeaders(env)
-//         },
-//       });
+
+      const scriptFileName = worker.js;
+      const metadata = {
+        'main_module': scriptFileName,
+        // services: [  // Might not work yet...
+        //   {
+        //     binding: "",
+        //     service: "",
+        //     environment: ""
+        //   }
+        // ],
+        // bindings: [
+        //   {
+        //     "type": "",
+        //     "param": "",
+        //     "name": ""
+        //   }
+        // ],
+      };
+      const formData = new FormData();
+      formData.append('script', new File([scriptContent], scriptFileName, { type: 'application/javascript+module'}));
+      // const helloModuleContent = 'const hello = "Hello World!"; export { hello };';
+      // formData.append('hello_module', new File([helloModuleContent], 'hello_module.mjs', { type: 'application/javascript+module'}));
+      formData.append('metadata', new File([JSON.stringify(metadata)], 'metadata.json', { type: 'application/json'}));
+      // return await fetch(`${ScriptsURI(env)}/${scriptName}`, {
+      const results = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${requestId}`, {
+        method: 'PUT',
+        body: formData,
+        headers: {
+          'authorization': 'Bearer ' + env.CF_API_TOKEN,
+          // 'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryuAT7UVLyzllBl3ey',
+        },
+      }).then(res => json()).catch(({name, message, stack}) => ({ error: {name, message, stack}}))
 //     }
 
       console.log({results})
