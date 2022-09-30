@@ -86,14 +86,14 @@ export default {
     request.ctx = JSON.parse(headers['ctx-do'])
     request.headers.delete('cookie')
     request.headers.delete('ctx-do')
-    return fetch(request, env, ctx)
+    return worker.fetch(request, env, ctx)
   }
 }
 `
 
 
       const formData = new FormData()
-      formData.append('script', new File([scriptContent], 'worker.js', { type: 'application/javascript+module'}))
+      formData.append('worker', new File([scriptContent], 'worker.js', { type: 'application/javascript+module'}))
       formData.append('index', new File([workerWrapper], 'index.js', { type: 'application/javascript+module'}));
       formData.append('metadata', new File([JSON.stringify(metadata)], 'metadata.json', { type: 'application/json'}))
       const results = await fetch(cloudflareDeployURL, {
