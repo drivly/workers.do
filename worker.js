@@ -28,13 +28,13 @@ export default {
       cloudflareApiToken,
     } = body
     
-    console.log(context)
+    // console.log(context)
 
     const repoName = context?.payload?.repository?.name
     const ownerName = context?.payload?.repository?.owner?.name
     const commitSha = context?.sha
     
-    // console.log({name, repoName, ownerName, worker})
+    console.log({name, repoName, ownerName, worker})
     
     // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
