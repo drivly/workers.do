@@ -30,6 +30,7 @@ export default {
     
     const repoName = context?.repository?.name
     const ownerName = context?.owner?.name
+    const commitSha = context?.sha
     
     console.log({name, repoName, ownerName, worker})
     
@@ -74,9 +75,25 @@ export default {
 
       console.log(JSON.stringify({results}))
 
-      const codeLines = results.success ? undefined : scriptContent.split('\n')
+      let url, codeLines = undefined
 
-      const url = `https://${workerId}.workers.do`
+      if (results.success) {
+
+        url = `https://${workerId}.workers.do`
+
+        const comment = await fetch(`https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`, {
+          body: JSON.stringify({ body: 'Deployed successfully to ' + url }),
+          headers: {
+            Accept: 'application/vnd.github+json',
+            Authorization: 'Bearer ' + env.GITHUB_TOKEN,
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          method: 'POST'
+        }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
+        console.log(comment)
+      } else {
+        codeLines = scriptContent.split('\n')
+      }
     
       return new Response(JSON.stringify({ api, url, results, codeLines, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
