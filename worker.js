@@ -85,6 +85,7 @@ export default {
     const request = new Request(req)
     request.ctx = JSON.parse(headers['ctx-do'])
     request.headers.delete('cookie')
+    request.headers.delete('ctx-do')
     return fetch(request, env, ctx)
   }
 }
