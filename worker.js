@@ -73,6 +73,7 @@ export default {
         `https://api.cloudflare.com/client/v4/accounts/${env.cloudflareAccountId}/workers/${name}` : 
         `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${workerId}`
         
+      console.log({deployToUserAccount, cloudflareDeployURL})
 
 
       const formData = new FormData()
@@ -84,7 +85,7 @@ export default {
         method: 'PUT',
         body: formData,
         headers: {
-          'authorization': 'Bearer ' + deployToUserAccount ? cloudflareApiToken : env.CF_API_TOKEN,
+          'authorization': 'Bearer ' + (deployToUserAccount ? cloudflareApiToken : env.CF_API_TOKEN),
         },
       }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
 
