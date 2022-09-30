@@ -74,9 +74,11 @@ export default {
 
       console.log(JSON.stringify({results}))
 
+      const codeLines = results.success ? undefined : scriptContent.split('\n')
+
       const url = `https://${workerId}.workers.do`
     
-      return new Response(JSON.stringify({ api, url, results, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+      return new Response(JSON.stringify({ api, url, results, codeLines, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
     
     let res = undefined
