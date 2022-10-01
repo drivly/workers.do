@@ -14,6 +14,9 @@ export const api = {
   repo: 'https://github.com/drivly/workers.do',
 }
 
+import deployWorkerToPlatform from './deploy'
+import deployWorkerToCloudflare from './deploy'
+
 export default {
   fetch: async (req, env) => {
     // const request = req.clone()
@@ -29,6 +32,7 @@ export default {
       context,
       worker,
       domain,
+      config,
       cloudflareAccountId,
       cloudflareApiToken,
     } = body
@@ -63,79 +67,39 @@ export default {
       const tags = [name, repoName, ownerName, domain, email, ref, workerId, committerUsername].filter(el => el)
       
       console.log({tags})
-      
-      const scriptContent = worker //?? rootPath ? "export default {\n  fetch: () => new Response('Hello World')\n}" : await fetch('https:/' + pathname).then(res => res.text()).catch() 
-      // const scriptFileName = 'worker.js';
-      const metadata = {
-        'main_module': 'worker.mjs', // 'index.mjs', // Figure out why the index module can't import the worker
-        'tags': tags,
-        // services: [  // Might not work yet...
-        //   {
-        //     binding: "",
-        //     service: "",
-        //     environment: ""
-        //   }
-        // ],
-        // bindings: [
-        //   {
-        //     "type": "",
-        //     "param": "",
-        //     "name": ""
-        //   }
-        // ],
-      }
 
       const deployToUserAccount = (name.length > 1 && cloudflareAccountId.length > 10 && cloudflareApiToken.length > 10) ? true : false
-
-      const cloudflareDeployURL = deployToUserAccount ? 
-        `https://api.cloudflare.com/client/v4/accounts/${cloudflareAccountId}/workers/scripts/${name}` : 
-        `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/${env.PLATFORM_NAMESPACE}/scripts/${workerId}`
+      
+      const namespace = env.PLATFORM_NAMESPACE // TODO: make this user/account specific
+      
+      const workersToDeploy = [
+        name,
+        `${commitSha.slice(0,7)}-${name}`,
+        `${ref}-${name}`,
+        domain && domain != '' ? domain : undefined,
+        domain && domain != '' ? `${ref}.${domain}` : undefined,
+        domain && domain != '' ? `${commitSha.slice(0,7)}.${domain}` : undefined,
+      ].filter(el => el)
+      
+      const [platformResults, userAccountResults] = await Promise.all([
+        Promise.all(workersToDeploy.map(workerId => deployWorkerToPlatform({ namespace, workerId, worker, config, tags, domain })),
+        deployToUserAccount ? deployWorkerToCloudflare({ name, worker, config, tags, cloudflareAccountId, cloudflareApiToken }) : undefined,
+      ])
         
-      console.log({deployToUserAccount, cloudflareDeployURL})
-
-      // Create a wrapper for the worker module to inject the ctx object
-      const workerWrapper = `
-import worker from 'worker'
-
-export default {
-  fetch: (req, env, ctx) => {
-    const headers = Object.fromEntries(req.headers)
-    const request = new Request(req)
-    request.ctx = JSON.parse(headers['ctx-do'])
-    request.headers.delete('cookie')
-    request.headers.delete('ctx-do')
-    return worker.fetch(request, env, ctx)
-  }
-}
-`
-
-
-      const formData = new FormData()
-      formData.append('worker', new File([scriptContent], 'worker.mjs', { type: 'application/javascript+module'}))
-      formData.append('index', new File([workerWrapper], 'index.mjs', { type: 'application/javascript+module'}));
-      formData.append('metadata', new File([JSON.stringify(metadata)], 'metadata.json', { type: 'application/json'}))
-      const results = await fetch(cloudflareDeployURL, {
-        method: 'PUT',
-        body: formData,
-        headers: {
-          'authorization': 'Bearer ' + (deployToUserAccount ? cloudflareApiToken : env.CF_API_TOKEN),
-        },
-      }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
-
-      console.log(Object.entries(formData))
+      const results = [userAccountResults, ...platformResults]
 
       console.log(JSON.stringify({results}))
 
       let url, codeLines = undefined
 
-      if (results.success) {
+      if (results[0].success) {
 
-        url = `https://${workerId}.workers.do`
+        url = workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n') + domain && domain != '' ? workersToDeploy.slice(3).map(id => `https://${id}`).join('\n')
 
         const commentURL = `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
         console.log(commentURL)
         const comment = await fetch(commentURL, {
-          body: JSON.stringify({ body: 'Deployed successfully to ' + url }),
+          body: JSON.stringify({ body: 'Deployed successfully to: \n' + url }),
           headers: {
             Accept: 'application/vnd.github+json',
             Authorization: 'Bearer ' + env.GITHUB_TOKEN,
