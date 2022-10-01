@@ -73,8 +73,8 @@ export default {
       
       const workersToDeploy = [
         name,
-        `${commitSha.slice(0,7)}-${name}`,
         `${ref}-${name}`,
+        `${commitSha.slice(0,7)}-${name}`,
         domain && domain != '' ? domain : undefined,
 //         domain && domain != '' ? `${ref}.${domain}` : undefined,
 //         domain && domain != '' ? `${commitSha.slice(0,7)}.${domain}` : undefined,
