@@ -96,7 +96,7 @@ export default {
         
         const customDomain = (domain && domain != '') ? await setupCustomDomain(domain, context, env) : undefined
 
-        url =  (customDomain?.success ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
+        url =  (customDomain?.id ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
         commentText = 'Deployed successfully to: \n' + url
 
         if (customDomain?.status == 'pending') {
