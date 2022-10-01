@@ -46,7 +46,7 @@ export default {
       if (!user.authenticated) return Response.redirect('https://workers.do/login')
       
       const [_,tags] = pathSegments
-      const workers = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/${env.PLATFORM_NAMESPACE}/scripts${ tags ? '?tags=' + tags : '' }`, { headers: { 'authorization': 'Bearer ' + env.CF_API_TOKEN }})
+      const workers = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/${env.PLATFORM_NAMESPACE}/scripts${ tags ? '?tags=' + tags : '' }`, { headers: { 'authorization': 'Bearer ' + env.CF_API_TOKEN }}).then(res => res.json())
       
       return json({api,workers,user})
     }
