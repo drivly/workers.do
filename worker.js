@@ -99,7 +99,7 @@ export default {
         
         const customDomain = (domain && domain != '') ? await setupCustomDomain(domain, context, env) : undefined
 
-        const customDomainUrls = (domain && domain != '') ? workersToDeploy.slice(3).map(id => `https://${id}`) : undefined
+        const customDomainUrls = (domain && domain != '') ? workersToDeploy.slice(3).map(id => `https://${id}`) : []
         const workersUrls = workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`)
         deployedUrls =  [...customDomainUrls, ...workersUrls]
         commentText = 'Deployed successfully to: \n' + url
