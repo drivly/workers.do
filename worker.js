@@ -42,7 +42,7 @@ export default {
     console.log({name, repoName, ownerName, worker})
     
     
-    if (req.method = 'get' && req.url.startsWith('https://workers.do/api')) {
+    if (req.method == 'get' && req.url.startsWith('https://workers.do/api')) {
       if (!user.authenticated) return Response.redirect('https://workers.do/login')
       
       const [_,tags] = pathSegments
