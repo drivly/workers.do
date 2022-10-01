@@ -56,10 +56,9 @@ export default {
     if (!subdomain) {
 
       const workerId = commitSha.slice(0,7) //+ '-' + ownerName //requestId
-      const tags = [name, repoName, ownerName, domain, workerId]
+      const tags = [name, repoName, ownerName, domain, workerId].filter(el => el)
       
       console.log({tags})
-      console.log(tags.filter(el => el))
       
       const scriptContent = worker //?? rootPath ? "export default {\n  fetch: () => new Response('Hello World')\n}" : await fetch('https:/' + pathname).then(res => res.text()).catch() 
       // const scriptFileName = 'worker.js';
