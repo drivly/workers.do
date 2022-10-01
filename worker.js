@@ -88,7 +88,7 @@ export default {
       const deployToUserAccount = (name.length > 1 && cloudflareAccountId.length > 10 && cloudflareApiToken.length > 10) ? true : false
 
       const cloudflareDeployURL = deployToUserAccount ? 
-        `https://api.cloudflare.com/client/v4/accounts/${cloudflareAccountId}/workers/${name}` : 
+        `https://api.cloudflare.com/client/v4/accounts/${cloudflareAccountId}/workers/scripts/${name}` : 
         `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/${env.PLATFORM_NAMESPACE}/scripts/${workerId}`
         
       console.log({deployToUserAccount, cloudflareDeployURL})
