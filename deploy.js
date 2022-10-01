@@ -1,6 +1,6 @@
-export const deployWorkerToPlatform = async ({ namespace, name, worker, config, tags }) => {
-  const cloudflareDeployURL = `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/${workerId}`
-  return deployWorker(cloudflareDeployURL, worker, tags, config, env.CF_API_TOKEN)
+export const deployWorkerToPlatform = async ({ namespace, name, worker, config, tags, cloudflareAccountId, cloudflareApiToken}) => {
+  const cloudflareDeployURL = `https://api.cloudflare.com/client/v4/accounts/${cloudflareAccountId}/workers/dispatch/namespaces/${namespace}/scripts/${name}`
+  return deployWorker(cloudflareDeployURL, worker, tags, config, cloudflareApiToken)
 }
 
 export const deployWorkerToCloudflare = async ({ name, worker, config, tags, cloudflareAccountId, cloudflareApiToken }) => {
