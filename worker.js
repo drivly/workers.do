@@ -92,7 +92,7 @@ export default {
 
       console.log(JSON.stringify({results}))
 
-      let comment, codeLines, deployedUrls = undefined
+      let comment, codeLines, deployedUrls, commentURL = undefined
       let commentText = ''
 
       if (results[0].success) {
@@ -112,7 +112,7 @@ export default {
           // commentText = commentText + customDomain?.ssl?.validation_records.map(record => `TXT (${record?.txt_name}) value: '${record?.txt_value}'\n`).join('')
         }
         
-        const commentURL = gist?.id ? `https://api.github.com/gists/${gist.id}/comments` : `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
+        commentURL = gist?.id ? `https://api.github.com/gists/${gist.id}/comments` : `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
         console.log({commentURL})
         comment = await fetch(commentURL, {
           body: JSON.stringify({ body: commentText }),
@@ -129,7 +129,7 @@ export default {
         codeLines = worker.split('\n')
       }
     
-      return new Response(JSON.stringify({ api, deployedUrls, commentText, results, codeLines, comment, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+      return new Response(JSON.stringify({ api, deployedUrls, commentURL, commentText, results, codeLines, comment, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
     
     let res = undefined
