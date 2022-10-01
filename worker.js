@@ -96,10 +96,10 @@ export default {
         
         const customDomain = (domain && domain != '') ? await setupCustomDomain(domain, context, env) : undefined
 
-        url =  (customDomain?.id ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
+        url =  ((domain && domain != '') ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
         commentText = 'Deployed successfully to: \n' + url
 
-        if (customDomain?.status == 'pending') {
+        if (customDomain?.status != 'active') {
           commentText = commentText + `\n\nFor your custom domain \`${domain}\` to work, you need to create a DNS records:\n` 
           commentText = commentText + `CNAME \`${domain}\` to \`workers.do\`\n`
           // commentText = commentText + `CNAME '*' (*.${domain}) to 'workers.do'\n`
