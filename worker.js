@@ -99,7 +99,7 @@ export default {
         url =  ((domain && domain != '') ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
         commentText = 'Deployed successfully to: \n' + url
 
-        if (customDomain?.status != 'active') {
+        if (domain && domain != '' && customDomain?.status != 'active') {
           commentText = commentText + `\n\nFor your custom domain \`${domain}\` to work, you need to create a DNS records:\n` 
           commentText = commentText + `CNAME \`${domain}\` to \`workers.do\`\n`
           // commentText = commentText + `CNAME '*' (*.${domain}) to 'workers.do'\n`
