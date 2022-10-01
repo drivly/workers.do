@@ -76,7 +76,7 @@ export default {
       
       const workersToDeploy = [
         gist ? gist.id.slice(0,7) : name,
-        gist ? `${gist.id.slice(0,7)}-${gist.owner?.login}` : `${ref}-${name}`,
+        gist ? `${gist.id.slice(0,7)}-${repoName}` : `${ref}-${name}`,
         gist ? `${repoName}-${gist.owner?.login}` : `${commitSha.slice(0,7)}-${name}`,
         domain && domain != '' ? domain : undefined,
 //         domain && domain != '' ? `${ref}.${domain}` : undefined,
