@@ -75,7 +75,7 @@ export default {
       const namespace = env.PLATFORM_NAMESPACE // TODO: make this user/account specific
       
       const workersToDeploy = [
-        name,
+        gist ? gist.id.slice(0,7) : name,
         gist ? `${gist.id.slice(0,7)}-${gist.owner?.login}` : `${ref}-${name}`,
         gist ? `${repoName}-${gist.owner?.login}` : `${commitSha.slice(0,7)}-${name}`,
         domain && domain != '' ? domain : undefined,
