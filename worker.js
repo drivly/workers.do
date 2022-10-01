@@ -85,7 +85,7 @@ export default {
         deployToUserAccount ? deployWorkerToCloudflare({ name, worker, config, tags, cloudflareAccountId, cloudflareApiToken }) : undefined,
       ])
         
-      const results = [userAccountResults, ...platformResults]
+      const results = [...platformResults, userAccountResults]
 
       console.log(JSON.stringify({results}))
 
