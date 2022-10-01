@@ -93,7 +93,7 @@ export default {
 
       if (results[0].success) {
 
-        url = workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n') + (domain && domain != '' ? workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') : '')
+        url = (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
 
         const commentURL = `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
         console.log(commentURL)
