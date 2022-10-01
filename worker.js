@@ -89,21 +89,21 @@ export default {
       console.log(JSON.stringify({results}))
 
       let codeLines = undefined
-      let comment = ''
+      let commentText = ''
 
       if (results[0].success) {
         
         const customDomain = (domain && domain != '') ? await setupCustomDomain(domain, context, env) : undefined
 
         
-        comment = 'Deployed successfully to: \n' + (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
+        commentText = 'Deployed successfully to: \n' + (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
 
         if (customDomain.status == 'pending') {
-          comment = comment + `\n\nFor the custom domain '${domain}' to work, you need to create the following DNS records:\n` +
-          comment = comment + `CNAME '@' (${domain}) to 'workers.do'\n`
-          comment = comment + `CNAME '*' (*.${domain}) to 'workers.do'\n`
-          comment = comment + `${customDomain?.ownership_verification?.type?.toUppercase()} (${customDomain?.ownership_verification?.name}) value: '${customDomain?.ownership_verification?.value}'\n`
-          comment = comment + customDomain?.ssl?.validation_records.map(record => `TXT (${record?.txt_name}) value: '${record?.txt_value}'\n`).join('')
+          commentText = commentText + `\n\nFor the custom domain '${domain}' to work, you need to create the following DNS records:\n` 
+          commentText = commentText + `CNAME '@' (${domain}) to 'workers.do'\n`
+          commentText = commentText + `CNAME '*' (*.${domain}) to 'workers.do'\n`
+          commentText = commentText + `${customDomain?.ownership_verification?.type?.toUppercase()} (${customDomain?.ownership_verification?.name}) value: '${customDomain?.ownership_verification?.value}'\n`
+          commentText = commentText + customDomain?.ssl?.validation_records.map(record => `TXT (${record?.txt_name}) value: '${record?.txt_value}'\n`).join('')
         }
         
         const commentURL = `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
