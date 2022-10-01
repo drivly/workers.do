@@ -67,7 +67,7 @@ export const setupCustomDomain = async (domain, context, env) => {
   
   if (!domainDetails?.value?.id) {
   
-    const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.CF_ACCOUNT_ID}/custom_hostnames`, {
+    const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.SAAS_ZONE_ID}/custom_hostnames`, {
       method: 'POST',
       body: JSON.stringify({
         hostname: domain,
