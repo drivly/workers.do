@@ -81,7 +81,7 @@ export default {
       ].filter(el => el)
       
       const [platformResults, userAccountResults] = await Promise.all([
-        Promise.all(workersToDeploy.map(workerId => deployWorkerToPlatform({ namespace, workerId, worker, config, tags, domain }))),
+        Promise.all(workersToDeploy.map(workerId => deployWorkerToPlatform({ namespace, workerId, worker, config, tags, domain, cloudflareAccountId: env.CF_ACCOUNT_ID, cloudflareApiToken: env.CF_API_TOKEN }))),
         deployToUserAccount ? deployWorkerToCloudflare({ name, worker, config, tags, cloudflareAccountId, cloudflareApiToken }) : undefined,
       ])
         
