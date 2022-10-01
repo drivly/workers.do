@@ -60,7 +60,7 @@ export default {
     }
     
     
-    if (!subdomain) {
+    if (!subdomain && hostname == 'workers.do') {
 
       const workerId = commitSha.slice(0,7) //+ '-' + ownerName //requestId
       const tags = [name, repoName, ownerName, domain, email, ref, workerId, committerUsername].filter(el => el)
