@@ -66,7 +66,7 @@ export const setupCustomDomain = async (domain, context, env) => {
   let domainDetails = await env.PLATFORM_DOMAINS.getWithMetadata(domain, { type: "json" })
   
   if (!domainDetails?.value?.id) {
-    const body = JSON.stringify({
+    const domainConfig = {
       hostname: domain,
       ssl: {
         "method": "http",
@@ -84,11 +84,11 @@ export const setupCustomDomain = async (domain, context, env) => {
         "bundle_method": "ubiquitous",
         "wildcard": false,
       }
-    })
-    console.log(body)
+    }
+    console.log(domainConfig)
     const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.SAAS_ZONE_ID}/custom_hostnames`, {
       method: 'POST',
-      body,
+      body: JSON.parse(domainConfig),
       headers: {
         'authorization': 'Bearer ' +  env.WORKERS_DO_TOKEN,
       },
