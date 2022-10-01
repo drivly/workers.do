@@ -102,7 +102,7 @@ export default {
         const customDomainUrls = (domain && domain != '') ? workersToDeploy.slice(3).map(id => `https://${id}`) : []
         const workersUrls = workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`)
         deployedUrls =  [...customDomainUrls, ...workersUrls]
-        commentText = 'Deployed successfully to: \n' + url
+        commentText = 'Deployed successfully to: \n' + deployedUrls.join('\n')
 
         if (domain && domain != '' && customDomain?.ssl?.status != 'active') {
           commentText = commentText + `\n\nFor your custom domain \`${domain}\` to work, you need to create a DNS record:\n\n` 
