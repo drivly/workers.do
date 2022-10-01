@@ -14,8 +14,8 @@ export const api = {
   repo: 'https://github.com/drivly/workers.do',
 }
 
-import deployWorkerToPlatform from './deploy'
-import deployWorkerToCloudflare from './deploy'
+import deployWorkerToPlatform from './deploy.js'
+import deployWorkerToCloudflare from './deploy.js'
 
 export default {
   fetch: async (req, env) => {
