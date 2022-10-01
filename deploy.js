@@ -26,7 +26,7 @@ export default {
 const deployWorker = async (cloudflareDeployURL, module, config, tags, authToken) => {
   
   const metadata = {
-    ...config,
+//    ...config,
     'main_module': 'worker.mjs', // 'index.mjs', // Figure out why the index module can't import the worker
     'tags': tags,
     // services: [  // Might not work yet...
