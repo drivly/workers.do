@@ -103,7 +103,7 @@ export default {
           commentText = commentText + `\n\nFor the custom domain '${domain}' to work, you need to create the following DNS records:\n` 
           commentText = commentText + `CNAME '@' (${domain}) to 'workers.do'\n`
           commentText = commentText + `CNAME '*' (*.${domain}) to 'workers.do'\n`
-          commentText = commentText + `${customDomain?.ownership_verification?.type?.toUppercase()} (${customDomain?.ownership_verification?.name}) value: '${customDomain?.ownership_verification?.value}'\n`
+          commentText = commentText + `${customDomain?.ownership_verification?.type} (${customDomain?.ownership_verification?.name}) value: '${customDomain?.ownership_verification?.value}'\n`
           commentText = commentText + customDomain?.ssl?.validation_records.map(record => `TXT (${record?.txt_name}) value: '${record?.txt_value}'\n`).join('')
         }
         
