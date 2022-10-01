@@ -101,7 +101,9 @@ export default {
 
         const customDomainUrls = (domain && domain != '') ? workersToDeploy.slice(3).map(id => `https://${id}`) : []
         const workersUrls = workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`)
-        deployedUrls =  [...customDomainUrls, ...workersUrls]
+        const lambdaUrls = workersToDeploy.slice(0,3).map(id => `https://${id}.入.io`)
+
+        deployedUrls =  [...customDomainUrls, ...workersUrls, ...lambdaUrls]
         commentText = 'Deployed successfully to: \n' + deployedUrls.join('\n')
 
         if (domain && domain != '' && customDomain?.ssl?.status != 'active') {
