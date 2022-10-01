@@ -100,7 +100,7 @@ export default {
         commentText = 'Deployed successfully to: \n' + url
 
         if (domain && domain != '' && customDomain?.ssl?.status != 'active') {
-          commentText = commentText + `\n\nFor your custom domain \`${domain}\` to work, you need to create a DNS records:\n\n` 
+          commentText = commentText + `\n\nFor your custom domain \`${domain}\` to work, you need to create a DNS record:\n\n` 
           commentText = commentText + `\`CNAME\` \`${domain}\` to \`workers.do\`\n`
           // commentText = commentText + `CNAME '*' (*.${domain}) to 'workers.do'\n`
           // commentText = commentText + `${customDomain?.ownership_verification?.type} (${customDomain?.ownership_verification?.name}) value: '${customDomain?.ownership_verification?.value}'\n`
