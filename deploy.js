@@ -98,7 +98,7 @@ export const setupCustomDomain = async (domain, context, env) => {
     const username = context?.payload?.commits?.committer?.username
     const email = context?.payload?.pusher?.email.replace('@','-at-').replaceAll('.','--')
     
-    await env.PLATFORM_DOMAINS.put(domain, JSON.stringify({domainDetails}), { metadata: { id: domainDetails.id, owner, name, username, email  }})
+    await env.PLATFORM_DOMAINS.put(domain, JSON.stringify({domainDetails}, null, 2), { metadata: { id: domainDetails.id, owner, name, username, email  }})
     
     return domainDetails
     
