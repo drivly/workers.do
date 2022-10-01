@@ -92,7 +92,7 @@ export default {
 
       console.log(JSON.stringify({results}))
 
-      let codeLines, url = undefined
+      let comment, codeLines, url = undefined
       let commentText = ''
 
       if (results[0].success) {
@@ -112,7 +112,7 @@ export default {
         
         const commentURL = `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
         console.log(commentURL)
-        const comment = await fetch(commentURL, {
+        comment = await fetch(commentURL, {
           body: JSON.stringify({ body: commentText }),
           headers: {
             Accept: 'application/vnd.github+json',
