@@ -14,7 +14,7 @@ export const api = {
   repo: 'https://github.com/drivly/workers.do',
 }
 
-import { deployWorkerToPlatform, deployWorkerToCloudflare } from './deploy'
+import { deployWorkerToPlatform, deployWorkerToCloudflare, setupCustomDomain } from './deploy'
 
 export default {
   fetch: async (req, env) => {
@@ -42,7 +42,7 @@ export default {
     const ownerName = context?.payload?.repository?.owner?.name
     const committerName = context?.payload?.commits?.committer?.name.replaceAll(' ','-')
     const committerUsername = context?.payload?.commits?.committer?.username
-    const ref = context?.payload?.ref.replace('ref/heads/','').replace('ref/','').replaceAll('/','-')
+    const ref = context?.payload?.ref.replace('ref/head/','').replace('ref/','').replaceAll('/','-')
     const email = context?.payload?.pusher?.email.replace('@','-at-').replaceAll('.','--')
     const commitSha = context?.sha
     
@@ -59,7 +59,6 @@ export default {
     }
     
     
-    // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
 
       const workerId = commitSha.slice(0,7) //+ '-' + ownerName //requestId
@@ -89,16 +88,27 @@ export default {
 
       console.log(JSON.stringify({results}))
 
-      let url, codeLines = undefined
+      let comment, codeLines = undefined
 
       if (results[0].success) {
+        
+        const customDomain = (domain && domain != '') ? await setupCustomDomain(domain, context, env) : undefined
 
-        url = (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
+        
+        comment = 'Deployed successfully to: \n' + (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
 
+        if (customDomain.status == 'pending') {
+          comment = comment + `\n\nFor the custom domain '${domain}' to work, you need to create the following DNS records:\n`
+          comment = comment + `CNAME '@' (${domain}) to 'workers.do'\n`
+          comment = comment + `CNAME '*' (*.${domain}) to 'workers.do'\n`
+          comment = comment + `${customDomain?.ownership_verification?.type?.toUppercase()} (${customDomain?.ownership_verification?.name}) value: '${customDomain?.ownership_verification?.value}'\n`
+          comment = comment +  customDomain?.ssl?.validation_records.map(record => `TXT (${record?.txt_name}) value: '${record?.txt_value}'\n`
+        }
+        
         const commentURL = `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
         console.log(commentURL)
         const comment = await fetch(commentURL, {
-          body: JSON.stringify({ body: 'Deployed successfully to: \n' + url }),
+          body: JSON.stringify({ body: comment }),
           headers: {
             Accept: 'application/vnd.github+json',
             Authorization: 'Bearer ' + env.GITHUB_TOKEN,
