@@ -46,7 +46,7 @@ export default {
     const ownerName = context?.payload?.repository?.owner?.name ?? gist?.owner?.login
     const committerName = context?.payload?.commits?.committer?.name.replaceAll(' ','-')
     const committerUsername = context?.payload?.commits?.committer?.username 
-    const ref = context?.payload?.ref.replace('ref/head/','').replace('refs/heads/','').replace('ref/','').replaceAll('/','-') ?? gist?.owner?.login
+    const ref = context?.payload?.ref.replace('ref/head/','').replace('refs/heads/','').replace('ref/','').replaceAll('/','-')
     const email = context?.payload?.pusher?.email.replace('@','-at-').replaceAll('.','-dot-')
     const commitSha = context?.sha ?? gist?.history[0]?.version ?? crypto.randomUUID()
     
@@ -76,8 +76,8 @@ export default {
       
       const workersToDeploy = [
         name,
-        `${ref}-${name}`,
-        `${commitSha.slice(0,7)}-${name}`,
+        gist ? `${gist.id.slice(0,7)}-${gist.owner?.login}` : `${ref}-${name}`,
+        gist ? `${repoName}-${gist.owner?.login}` : `${commitSha.slice(0,7)}-${name}`,
         domain && domain != '' ? domain : undefined,
 //         domain && domain != '' ? `${ref}.${domain}` : undefined,
 //         domain && domain != '' ? `${commitSha.slice(0,7)}.${domain}` : undefined,
