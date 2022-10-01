@@ -63,7 +63,7 @@ export default {
     }
     
     
-    if (!subdomain && hostname == 'workers.do') {
+    if (!subdomain && (hostname == 'workers.do' || hostname == 'xn--y5q.io/')) { // 入.io
 
       const workerId = commitSha.slice(0,7) //+ '-' + ownerName //requestId
       const tags = [name, repoName, ownerName, domain, email, ref, workerId, committerUsername].filter(el => el)
