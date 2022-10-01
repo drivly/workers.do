@@ -81,7 +81,7 @@ export const setupCustomDomain = async (domain, context, env) => {
     console.log(domainConfig)
     const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.SAAS_ZONE_ID}/custom_hostnames`, {
       method: 'POST',
-      body: JSON.parse(domainConfig),
+      body: JSON.stringify(domainConfig),
       headers: {
         'authorization': 'Bearer ' +  env.WORKERS_DO_TOKEN,
         'content-type': 'application/json'
