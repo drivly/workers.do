@@ -124,7 +124,7 @@ export default {
         codeLines = worker.split('\n')
       }
     
-      return new Response(JSON.stringify({ api, url, results, codeLines, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+      return new Response(JSON.stringify({ api, url, commentText, results, codeLines, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
     
     let res = undefined
