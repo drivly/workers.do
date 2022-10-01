@@ -18,6 +18,7 @@ import { deployWorkerToPlatform, deployWorkerToCloudflare, setupCustomDomain } f
 
 export default {
   fetch: async (req, env) => {
+    try {
     // const request = req.clone()
     const clonedReq = req.clone()
     let request = new Request(clonedReq)
@@ -156,6 +157,9 @@ export default {
     // let data = text.startsWith('{') || text.startsWith('[') ? await JSON.parse(body).catch() : text
  
     return new Response(JSON.stringify({ api, status, text, headers, data, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+    } catch ({name, message, stack }) {
+      return new Response(JSON.stringify({ status: 500, error: { name, message, stack }}))
+    }
   },
 }
 
