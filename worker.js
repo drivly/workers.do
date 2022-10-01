@@ -113,7 +113,7 @@ export default {
         }
         
         const commentURL = gist?.id ? `https://api.github.com/gists/${gist.id}/comments` : `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
-        console.log(commentURL)
+        console.log({commentURL})
         comment = await fetch(commentURL, {
           body: JSON.stringify({ body: commentText }),
           headers: {
