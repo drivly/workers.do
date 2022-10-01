@@ -75,8 +75,8 @@ export default {
         `${commitSha.slice(0,7)}-${name}`,
         `${ref}-${name}`,
         domain && domain != '' ? domain : undefined,
-        domain && domain != '' ? `${ref}.${domain}` : undefined,
-        domain && domain != '' ? `${commitSha.slice(0,7)}.${domain}` : undefined,
+//         domain && domain != '' ? `${ref}.${domain}` : undefined,
+//         domain && domain != '' ? `${commitSha.slice(0,7)}.${domain}` : undefined,
       ].filter(el => el)
       
       const [platformResults, userAccountResults] = await Promise.all([
