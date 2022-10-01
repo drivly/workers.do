@@ -70,7 +70,7 @@ export default {
       
       console.log({tags})
 
-      const deployToUserAccount = (name.length > 1 && cloudflareAccountId.length > 10 && cloudflareApiToken.length > 10) ? true : false
+      const deployToUserAccount = (name?.length > 1 && cloudflareAccountId?.length > 10 && cloudflareApiToken?.length > 10) ? true : false
       
       const namespace = env.PLATFORM_NAMESPACE // TODO: make this user/account specific
       
