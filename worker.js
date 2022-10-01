@@ -37,10 +37,10 @@ export default {
 
     const repoName = context?.payload?.repository?.name
     const ownerName = context?.payload?.repository?.owner?.name
-    const committerName = context?.payload?.commits?.committer?.name
+    const committerName = context?.payload?.commits?.committer?.name.replaceAll(' ','-')
     const committerUsername = context?.payload?.commits?.committer?.username
     const ref = context?.payload?.ref.replace('ref/heads/','').replace('ref/','').replaceAll('/','-')
-    const email = context?.payload?.pusher?.email
+    const email = context?.payload?.pusher?.email.replace('@','-at-').replaceAll('.','--')
     const commitSha = context?.sha
     
     console.log({name, repoName, ownerName, worker})
