@@ -98,7 +98,7 @@ export default {
         
         commentText = 'Deployed successfully to: \n' + (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
 
-        if (customDomain.status == 'pending') {
+        if (customDomain?.status == 'pending') {
           commentText = commentText + `\n\nFor the custom domain '${domain}' to work, you need to create the following DNS records:\n` 
           commentText = commentText + `CNAME '@' (${domain}) to 'workers.do'\n`
           commentText = commentText + `CNAME '*' (*.${domain}) to 'workers.do'\n`
