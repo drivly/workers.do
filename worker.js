@@ -20,7 +20,7 @@ export default {
     const clonedReq = req.clone()
     let request = new Request(clonedReq)
     const ctx = await env.CTX.fetch(req).then(res => res.json())
-    const { user, requestId, subdomain, body, rootPath, pathname } = ctx
+    const { user, requestId, subdomain, body, rootPath, pathname, pathSegments } = ctx
     
 //     console.log(body)
 //     console.log(user)
@@ -41,14 +41,27 @@ export default {
     
     console.log({name, repoName, ownerName, worker})
     
+    
+    if (req.url.startsWith('https://workers.do/api')) {
+      if (!user.authenticated) return Response.redirect('https://workers.do/login')
+      
+      const [_,tags] = pathSegments
+      const workers = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/${env.PLATFORM_NAMESPACE}/scripts${ tags ? '?tags=' + tags : '' }`, { headers: { 'authorization': 'Bearer ' + env.CF_API_TOKEN }})
+      
+      return json({api,workers,user})
+    }
+    
+    
     // "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/dispatch/namespaces/${namespace}/scripts/{requestId}"
     if (!subdomain) {
 
+      const workerId = commitSha.slice(0,7) //+ '-' + ownerName //requestId
+      
       const scriptContent = worker //?? rootPath ? "export default {\n  fetch: () => new Response('Hello World')\n}" : await fetch('https:/' + pathname).then(res => res.text()).catch() 
       // const scriptFileName = 'worker.js';
       const metadata = {
         'main_module': 'worker.mjs', // 'index.mjs', // Figure out why the index module can't import the worker
-        'tags': [name, repoName, ownerName, domain, commitSha],
+        'tags': [name, repoName, ownerName, domain, workerId],
         // services: [  // Might not work yet...
         //   {
         //     binding: "",
@@ -65,13 +78,11 @@ export default {
         // ],
       }
 
-      const workerId = commitSha.slice(0,7) //+ '-' + ownerName //requestId
-
       const deployToUserAccount = (name.length > 1 && cloudflareAccountId.length > 10 && cloudflareApiToken.length > 10) ? true : false
 
       const cloudflareDeployURL = deployToUserAccount ? 
         `https://api.cloudflare.com/client/v4/accounts/${cloudflareAccountId}/workers/${name}` : 
-        `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/example-namespace/scripts/${workerId}`
+        `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/workers/dispatch/namespaces/${env.PLATFORM_NAMESPACE}/scripts/${workerId}`
         
       console.log({deployToUserAccount, cloudflareDeployURL})
 
@@ -160,3 +171,6 @@ export default {
     return new Response(JSON.stringify({ api, status, text, headers, data, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
   },
 }
+
+export const json = data  => new Response(JSON.stringify(data, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+
