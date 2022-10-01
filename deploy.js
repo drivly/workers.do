@@ -61,32 +61,58 @@ const deployWorker = async (cloudflareDeployURL, module, config, tags, authToken
   return results
 }
 
-export const setupCustomDomain = async (domain, env) => {
+export const setupCustomDomain = async (domain, context, env) => {
   
+  let domainDetails = await env.PLATFORM_DOMAINS.getWithMetadata(domain, { type: "json" })
   
-    
-  const results = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.CF_ACCOUNT_ID}/custom_hostnames`, {
-    method: 'POST',
-    body: JSON.stringify({
-      "method": "http",
-      "type": "dv",
-      "settings": {
-        "http2": "on",
-        "min_tls_version": "1.2",
-        "tls_1_3": "on",
-        "ciphers": [
-          "ECDHE-RSA-AES128-GCM-SHA256",
-          "AES128-SHA"
-        ],
-        "early_hints": "on"
+  if (!domainDetails) {
+  
+    const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.CF_ACCOUNT_ID}/custom_hostnames`, {
+      method: 'POST',
+      body: JSON.stringify({
+        "method": "http",
+        "type": "dv",
+        "settings": {
+          "http2": "on",
+          "min_tls_version": "1.2",
+          "tls_1_3": "on",
+          "ciphers": [
+            "ECDHE-RSA-AES128-GCM-SHA256",
+            "AES128-SHA"
+          ],
+          "early_hints": "on"
+        },
+        "bundle_method": "ubiquitous",
+        "wildcard": false,
+      }),
+      headers: {
+        'authorization': 'Bearer ' +  env.CF_API_TOKEN,
       },
-      "bundle_method": "ubiquitous",
-      "wildcard": false,
-    }),
-    headers: {
-      'authorization': 'Bearer ' +  env.CF_API_TOKEN,
-    },
-  }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
-  
+    }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
+    
+    console.log({customHostname})
+    
+    domainDetails = {  ...customHostname.result, context } 
+    
+    
+    const owner = context?.payload?.repository?.owner?.name
+    const name = context?.payload?.commits?.committer?.name.replaceAll(' ','-')
+    const username = context?.payload?.commits?.committer?.username
+    const email = context?.payload?.pusher?.email.replace('@','-at-').replaceAll('.','--')
+    
+    await env.PLATFORM_DOMAINS.put(domain, JSON.stringify({domainDetails}), { metadata: { id: domainDetails.id, owner, name, username, email  }})
+    
+    return domainDetails
+    
+  } else {
+    const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.CF_ACCOUNT_ID}/custom_hostnames/${domainDetails.id}`, {
+      headers: { 'authorization': 'Bearer ' +  env.CF_API_TOKEN },
+    }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
+    
+    console.log({customHostname, domainDetails})
+    
+    return customHostname.result
+    
+  }
   
 }
