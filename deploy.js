@@ -70,20 +70,23 @@ export const setupCustomDomain = async (domain, context, env) => {
     const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.CF_ACCOUNT_ID}/custom_hostnames`, {
       method: 'POST',
       body: JSON.stringify({
-        "method": "http",
-        "type": "dv",
-        "settings": {
-          "http2": "on",
-          "min_tls_version": "1.2",
-          "tls_1_3": "on",
-          "ciphers": [
-            "ECDHE-RSA-AES128-GCM-SHA256",
-            "AES128-SHA"
-          ],
-          "early_hints": "on"
-        },
-        "bundle_method": "ubiquitous",
-        "wildcard": false,
+        hostname: domain,
+        ssl: {
+          "method": "http",
+          "type": "dv",
+          "settings": {
+            "http2": "on",
+            "min_tls_version": "1.2",
+            "tls_1_3": "on",
+            "ciphers": [
+              "ECDHE-RSA-AES128-GCM-SHA256",
+              "AES128-SHA"
+            ],
+            "early_hints": "on"
+          },
+          "bundle_method": "ubiquitous",
+          "wildcard": false,
+        }
       }),
       headers: {
         'authorization': 'Bearer ' +  env.WORKERS_DO_TOKEN,
