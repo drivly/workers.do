@@ -64,10 +64,8 @@ const deployWorker = async (cloudflareDeployURL, module, config, tags, authToken
 export const setupCustomDomain = async (domain, context, env) => {
   
   let domainDetails = await env.PLATFORM_DOMAINS.getWithMetadata(domain, { type: "json" })
-
-  console.log(domainDetails)
   
-  if (!domainDetails?.value?.domainDetails?.id) {
+  if (!domainDetails?.value?.id) {
     const domainConfig = {
       hostname: domain,
       "ssl": {
@@ -90,17 +88,17 @@ export const setupCustomDomain = async (domain, context, env) => {
       },
     }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
     
-    console.log({customHostname})
+    
     
     domainDetails = {  ...customHostname.result, context } 
-    
+    console.log({domainDetails})
     
     const owner = context?.payload?.repository?.owner?.name
     const name = context?.payload?.commits?.committer?.name.replaceAll(' ','-')
     const username = context?.payload?.commits?.committer?.username
     const email = context?.payload?.pusher?.email.replace('@','-at-').replaceAll('.','--')
     
-    await env.PLATFORM_DOMAINS.put(domain, JSON.stringify({domainDetails}, null, 2), { metadata: { id: domainDetails.id, owner, name, username, email  }})
+    await env.PLATFORM_DOMAINS.put(domain, JSON.stringify(domainDetails, null, 2), { metadata: { id: domainDetails.id, owner, name, username, email  }})
     
     return domainDetails
     
@@ -109,9 +107,10 @@ export const setupCustomDomain = async (domain, context, env) => {
       headers: { 'authorization': 'Bearer ' +  env.WORKERS_DO_TOKEN },
     }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
     
-    console.log({customHostname, domainDetails})
+    domainDetails = {  ...customHostname.result, context } 
+    console.log({domainDetails})
     
-    return customHostname.result
+    return domainDetails
     
   }
   
