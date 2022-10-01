@@ -30,6 +30,7 @@ export default {
     const { 
       name,
       context,
+      gist,
       worker,
       domain,
       config,
@@ -39,13 +40,15 @@ export default {
     
     // console.log(context)
 
-    const repoName = context?.payload?.repository?.name
-    const ownerName = context?.payload?.repository?.owner?.name
+    console.log({gist})
+
+    const repoName = context?.payload?.repository?.name ?? String(gist?.description).toLowerCase().replaceAll(' ','-')
+    const ownerName = context?.payload?.repository?.owner?.name ?? gist?.owner?.login
     const committerName = context?.payload?.commits?.committer?.name.replaceAll(' ','-')
-    const committerUsername = context?.payload?.commits?.committer?.username
+    const committerUsername = context?.payload?.commits?.committer?.username 
     const ref = context?.payload?.ref.replace('ref/head/','').replace('refs/heads/','').replace('ref/','').replaceAll('/','-')
     const email = context?.payload?.pusher?.email.replace('@','-at-').replaceAll('.','-dot-')
-    const commitSha = context?.sha
+    const commitSha = context?.sha ?? gist?.history[0]?.version ?? crypto.randomUUID()
     
     console.log({name, repoName, ownerName, worker})
     
