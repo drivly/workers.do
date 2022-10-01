@@ -92,14 +92,16 @@ export default {
 
       console.log(JSON.stringify({results}))
 
-      let comment, codeLines, url = undefined
+      let comment, codeLines, deployedUrls = undefined
       let commentText = ''
 
       if (results[0].success) {
         
         const customDomain = (domain && domain != '') ? await setupCustomDomain(domain, context, env) : undefined
 
-        url =  ((domain && domain != '') ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
+        const customDomainUrls = (domain && domain != '') ? workersToDeploy.slice(3).map(id => `https://${id}`) : undefined
+        const workersUrls = workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`)
+        deployedUrls =  [...customDomainUrls, ...workersUrls]
         commentText = 'Deployed successfully to: \n' + url
 
         if (domain && domain != '' && customDomain?.ssl?.status != 'active') {
@@ -127,7 +129,7 @@ export default {
         codeLines = worker.split('\n')
       }
     
-      return new Response(JSON.stringify({ api, url, commentText, results, codeLines, comment, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+      return new Response(JSON.stringify({ api, deployedUrls, commentText, results, codeLines, comment, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
     
     let res = undefined
