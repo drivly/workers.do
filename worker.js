@@ -158,7 +158,7 @@ export default {
  
     return new Response(JSON.stringify({ api, status, text, headers, data, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     } catch ({name, message, stack }) {
-      return new Response(JSON.stringify({ status: 500, error: { name, message, stack }}))
+      return new Response(JSON.stringify({ status: 500, error: { name, message, stack }}), {status: 500})
     }
   },
 }
