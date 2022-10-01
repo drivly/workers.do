@@ -86,7 +86,7 @@ export const setupCustomDomain = async (domain, context, env) => {
         "wildcard": false,
       }),
       headers: {
-        'authorization': 'Bearer ' +  env.CF_API_TOKEN,
+        'authorization': 'Bearer ' +  env.WORKERS_DO_TOKEN,
       },
     }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
     
@@ -106,7 +106,7 @@ export const setupCustomDomain = async (domain, context, env) => {
     
   } else {
     const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.CF_ACCOUNT_ID}/custom_hostnames/${domainDetails?.value?.id}`, {
-      headers: { 'authorization': 'Bearer ' +  env.CF_API_TOKEN },
+      headers: { 'authorization': 'Bearer ' +  env.WORKERS_DO_TOKEN },
     }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
     
     console.log({customHostname, domainDetails})
