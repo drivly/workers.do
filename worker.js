@@ -88,14 +88,14 @@ export default {
 
       console.log(JSON.stringify({results}))
 
-      let codeLines = undefined
+      let codeLines, url = undefined
       let commentText = ''
 
       if (results[0].success) {
         
         const customDomain = (domain && domain != '') ? await setupCustomDomain(domain, context, env) : undefined
 
-        const url =  (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
+        url =  (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
         commentText = 'Deployed successfully to: \n' + url
 
         if (customDomain?.status == 'pending') {
