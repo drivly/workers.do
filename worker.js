@@ -61,7 +61,7 @@ export default {
       // const scriptFileName = 'worker.js';
       const metadata = {
         'main_module': 'worker.mjs', // 'index.mjs', // Figure out why the index module can't import the worker
-        'tags': [name, repoName, ownerName, domain, workerId],
+        'tags': [name, repoName, ownerName, domain, workerId].filter(el => el),
         // services: [  // Might not work yet...
         //   {
         //     binding: "",
