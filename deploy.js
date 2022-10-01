@@ -68,21 +68,14 @@ export const setupCustomDomain = async (domain, context, env) => {
   if (!domainDetails?.value?.id) {
     const domainConfig = {
       hostname: domain,
-      ssl: {
+      "ssl": {
         "method": "http",
         "type": "dv",
-        "settings": {
-          "http2": "on",
-          "min_tls_version": "1.2",
-          "tls_1_3": "on",
-          "ciphers": [
-            "ECDHE-RSA-AES128-GCM-SHA256",
-            "AES128-SHA"
-          ],
-          "early_hints": "on"
-        },
-        "bundle_method": "ubiquitous",
         "wildcard": false,
+        "certificate_authority": "digicert",
+        "settings": {
+          "min_tls_version": "1.0"
+        }
       }
     }
     console.log(domainConfig)
@@ -91,6 +84,7 @@ export const setupCustomDomain = async (domain, context, env) => {
       body: JSON.parse(domainConfig),
       headers: {
         'authorization': 'Bearer ' +  env.WORKERS_DO_TOKEN,
+        'content-type': 'application/json'
       },
     }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
     
