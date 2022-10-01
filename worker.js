@@ -141,7 +141,7 @@ export default {
         request.cf.ctx = ctx
         request.headers.append('ctx-do', JSON.stringify(ctx))
         
-        if (!hostname.includes('workers.do') || !hostname.includes('xn--y5q.io/')) { // 入.io
+        if (!hostname.includes('workers.do') && !hostname.includes('xn--y5q.io/')) { // 入.io
           res = await env.dispatcher.get(hostname).fetch(request)
         } else {
           res = await env.dispatcher.get(subdomain).fetch(request)
