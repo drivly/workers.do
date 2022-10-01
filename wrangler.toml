@@ -7,6 +7,11 @@ services = [
   { binding = "CTX", service = "ctx-do", environment = "production" }
 ]
 
+[[kv_namespaces]]
+  binding = "PLATFORM_DOMAINS"
+  id = "8076b94771a14195abe77f9f1c8988a8"
+  preview_id = "8076b94771a14195abe77f9f1c8988a8"
+
 [[dispatch_namespaces]]
 binding = "dispatcher"
 namespace = "example-namespace"
