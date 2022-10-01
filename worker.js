@@ -121,7 +121,7 @@ export default {
         }).then(res => res.text()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
         console.log(comment)
       } else {
-        codeLines = scriptContent.split('\n')
+        codeLines = worker.split('\n')
       }
     
       return new Response(JSON.stringify({ api, url, results, codeLines, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
