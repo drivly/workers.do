@@ -88,7 +88,8 @@ export default {
 
       console.log(JSON.stringify({results}))
 
-      let comment, codeLines = undefined
+      let codeLines = undefined
+      let comment = ''
 
       if (results[0].success) {
         
@@ -98,7 +99,7 @@ export default {
         comment = 'Deployed successfully to: \n' + (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
 
         if (customDomain.status == 'pending') {
-          comment = comment + `\n\nFor the custom domain '${domain}' to work, you need to create the following DNS records:\n`
+          comment = comment + `\n\nFor the custom domain '${domain}' to work, you need to create the following DNS records:\n` +
           comment = comment + `CNAME '@' (${domain}) to 'workers.do'\n`
           comment = comment + `CNAME '*' (*.${domain}) to 'workers.do'\n`
           comment = comment + `${customDomain?.ownership_verification?.type?.toUppercase()} (${customDomain?.ownership_verification?.name}) value: '${customDomain?.ownership_verification?.value}'\n`
