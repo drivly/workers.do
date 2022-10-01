@@ -105,7 +105,7 @@ export const setupCustomDomain = async (domain, context, env) => {
     return domainDetails
     
   } else {
-    const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.CF_ACCOUNT_ID}/custom_hostnames/${domainDetails?.value?.id}`, {
+    const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.SAAS_ZONE_ID}/custom_hostnames/${domainDetails?.value?.id}`, {
       headers: { 'authorization': 'Bearer ' +  env.WORKERS_DO_TOKEN },
     }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
     
