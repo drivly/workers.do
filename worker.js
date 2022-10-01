@@ -112,7 +112,7 @@ export default {
           // commentText = commentText + customDomain?.ssl?.validation_records.map(record => `TXT (${record?.txt_name}) value: '${record?.txt_value}'\n`).join('')
         }
         
-        const commentURL = `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
+        const commentURL = gist? `https://api.github.com/gists/${gist.id}/comments` : `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
         console.log(commentURL)
         comment = await fetch(commentURL, {
           body: JSON.stringify({ body: commentText }),
