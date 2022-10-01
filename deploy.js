@@ -65,7 +65,7 @@ export const setupCustomDomain = async (domain, context, env) => {
   
   let domainDetails = await env.PLATFORM_DOMAINS.getWithMetadata(domain, { type: "json" })
   
-  if (!domainDetails?.value?.id) {
+  if (!domainDetails?.value?.domainDetails?.id) {
     const domainConfig = {
       hostname: domain,
       "ssl": {
