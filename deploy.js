@@ -65,7 +65,7 @@ export const setupCustomDomain = async (domain, context, env) => {
   
   let domainDetails = await env.PLATFORM_DOMAINS.getWithMetadata(domain, { type: "json" })
   
-  if (!domainDetails) {
+  if (!domainDetails?.value?.id) {
   
     const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.CF_ACCOUNT_ID}/custom_hostnames`, {
       method: 'POST',
@@ -105,7 +105,7 @@ export const setupCustomDomain = async (domain, context, env) => {
     return domainDetails
     
   } else {
-    const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.CF_ACCOUNT_ID}/custom_hostnames/${domainDetails.id}`, {
+    const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.CF_ACCOUNT_ID}/custom_hostnames/${domainDetails?.value?.id}`, {
       headers: { 'authorization': 'Bearer ' +  env.CF_API_TOKEN },
     }).then(res => res.json()).catch(({name, message, stack }) => ({ error: {name, message, stack}}))
     
