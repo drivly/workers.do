@@ -37,6 +37,10 @@ export default {
 
     const repoName = context?.payload?.repository?.name
     const ownerName = context?.payload?.repository?.owner?.name
+    const committerName = context?.payload?.commits?.committer?.name
+    const committerUsername = context?.payload?.commits?.committer?.username
+    const ref = context?.payload?.ref.replace('ref/heads/','').replace('ref/','').replaceAll('/','-')
+    const email = context?.payload?.pusher?.email
     const commitSha = context?.sha
     
     console.log({name, repoName, ownerName, worker})
@@ -56,7 +60,7 @@ export default {
     if (!subdomain) {
 
       const workerId = commitSha.slice(0,7) //+ '-' + ownerName //requestId
-      const tags = [name, repoName, ownerName, domain, workerId].filter(el => el)
+      const tags = [name, repoName, ownerName, domain, email, ref, workerId, committerUsername].filter(el => el)
       
       console.log({tags})
       
