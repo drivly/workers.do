@@ -63,7 +63,7 @@ export default {
     }
     
     
-    if (!subdomain && (hostname == 'workers.do' || hostname == 'xn--y5q.io/')) { // 入.io
+    if (!subdomain && hostname == 'workers.do') { 
 
       const workerId = commitSha.slice(0,7) //+ '-' + ownerName //requestId
       const tags = [name, repoName, ownerName, domain, email, ref, workerId, committerUsername].filter(el => el)
@@ -141,7 +141,7 @@ export default {
         request.cf.ctx = ctx
         request.headers.append('ctx-do', JSON.stringify(ctx))
         
-        if (!hostname.includes('workers.do')) {
+        if (!hostname.includes('workers.do') || !hostname.includes('xn--y5q.io/')) { // 入.io
           res = await env.dispatcher.get(hostname).fetch(request)
         } else {
           res = await env.dispatcher.get(subdomain).fetch(request)
