@@ -95,8 +95,8 @@ export default {
         
         const customDomain = (domain && domain != '') ? await setupCustomDomain(domain, context, env) : undefined
 
-        
-        commentText = 'Deployed successfully to: \n' + (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
+        const url =  (domain && domain != '' ? (workersToDeploy.slice(3).map(id => `https://${id}`).join('\n') + '\n') : '') + workersToDeploy.slice(0,3).map(id => `https://${id}.workers.do`).join('\n')
+        commentText = 'Deployed successfully to: \n' + url
 
         if (customDomain?.status == 'pending') {
           commentText = commentText + `\n\nFor the custom domain '${domain}' to work, you need to create the following DNS records:\n` 
@@ -123,7 +123,7 @@ export default {
         codeLines = scriptContent.split('\n')
       }
     
-      return new Response(JSON.stringify({ api, results, codeLines, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
+      return new Response(JSON.stringify({ api, url, results, codeLines, user }, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
     }
     
     let res = undefined
