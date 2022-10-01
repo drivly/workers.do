@@ -20,7 +20,7 @@ export default {
     const clonedReq = req.clone()
     let request = new Request(clonedReq)
     const ctx = await env.CTX.fetch(req).then(res => res.json())
-    const { user, requestId, subdomain, body, rootPath, pathname, pathSegments } = ctx
+    const { user, requestId, hostname, domain, subdomain, body, rootPath, pathname, pathSegments } = ctx
     
 //     console.log(body)
 //     console.log(user)
@@ -158,7 +158,13 @@ export default {
         request.cf.user = user
         request.cf.ctx = ctx
         request.headers.append('ctx-do', JSON.stringify(ctx))
-        res = await env.dispatcher.get(subdomain).fetch(request)
+        
+        if (domain != 'workers.do') {
+          res = await env.dispatcher.get(hostname).fetch(request)
+        } else {
+          res = await env.dispatcher.get(subdomain).fetch(request)
+        }
+        
         return res
       } catch ({name, message, stack }) {
         return new Response(JSON.stringify({ status: 500, error: { name, message, stack }}))
