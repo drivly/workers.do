@@ -102,7 +102,7 @@ export default {
           comment = comment + `CNAME '@' (${domain}) to 'workers.do'\n`
           comment = comment + `CNAME '*' (*.${domain}) to 'workers.do'\n`
           comment = comment + `${customDomain?.ownership_verification?.type?.toUppercase()} (${customDomain?.ownership_verification?.name}) value: '${customDomain?.ownership_verification?.value}'\n`
-          comment = comment +  customDomain?.ssl?.validation_records.map(record => `TXT (${record?.txt_name}) value: '${record?.txt_value}'\n`
+          comment = comment + customDomain?.ssl?.validation_records.map(record => `TXT (${record?.txt_name}) value: '${record?.txt_value}'\n`).join('')
         }
         
         const commentURL = `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
