@@ -64,6 +64,8 @@ const deployWorker = async (cloudflareDeployURL, module, config, tags, authToken
 export const setupCustomDomain = async (domain, context, env) => {
   
   let domainDetails = await env.PLATFORM_DOMAINS.getWithMetadata(domain, { type: "json" })
+
+  console.log(domainDetails)
   
   if (!domainDetails?.value?.domainDetails?.id) {
     const domainConfig = {
@@ -78,7 +80,7 @@ export const setupCustomDomain = async (domain, context, env) => {
         }
       }
     }
-    console.log(domainConfig)
+    
     const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.SAAS_ZONE_ID}/custom_hostnames`, {
       method: 'POST',
       body: JSON.stringify(domainConfig),
