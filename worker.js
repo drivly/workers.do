@@ -109,7 +109,7 @@ export default {
         const commentURL = `https://api.github.com/repos/${ownerName}/${repoName}/commits/${commitSha}/comments`
         console.log(commentURL)
         const comment = await fetch(commentURL, {
-          body: JSON.stringify({ body: comment }),
+          body: JSON.stringify({ body: commentText }),
           headers: {
             Accept: 'application/vnd.github+json',
             Authorization: 'Bearer ' + env.GITHUB_TOKEN,
