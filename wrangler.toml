@@ -1,8 +1,8 @@
 name = "workers-do"
-routes = [
-  { pattern = "*/*", zone_name = "workers.do" },
-  { pattern = "*.入.io/*", zone_name = "入.io" },
-]
+# routes = [
+#  { pattern = "*/*", zone_name = "workers.do" },
+#  { pattern = "*.入.io/*", zone_name = "入.io" },
+# ]
 main = "worker.js"
 compatibility_date = "2022-08-25"
 
