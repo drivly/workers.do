@@ -76,6 +76,10 @@ export const setupCustomDomain = async (domain, context, env) => {
         "settings": {
           "min_tls_version": "1.0"
         }
+      },
+      "custom_metadata": {
+        "key": "value",
+        "test": true
       }
     }
     
