@@ -77,10 +77,10 @@ export const setupCustomDomain = async (domain, context, env) => {
           "min_tls_version": "1.0"
         }
       },
-      "custom_metadata": {
-        "key": "value",
-        "test": true
-      }
+//       "custom_metadata": {
+//         "key": "value",
+//         "test": true
+//       }
     }
     
     const customHostname = await fetch( `https://api.cloudflare.com/client/v4/zones/${env.SAAS_ZONE_ID}/custom_hostnames`, {
